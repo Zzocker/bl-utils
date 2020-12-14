@@ -43,7 +43,7 @@ func NewMsgf(status int, format string, msg ...interface{}) *Er {
 // Status codes
 const (
 	// OK Return on Success
-	OK = iota
+	OK = iota+1
 	// CANCELLED The operation was cancelled, typically by the caller.
 
 	CANCELLED
