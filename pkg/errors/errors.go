@@ -9,7 +9,7 @@ type Er struct {
 }
 
 func (e *Er) Error() string {
-	return fmt.Sprintf("Status %d: Error %s", e.Status, e.Err.Error())
+	return e.Err.Error()
 }
 
 // GetStatus returns status from error
@@ -40,10 +40,11 @@ func NewMsgf(status int, format string, msg ...interface{}) *Er {
 		Err:    fmt.Errorf(format, msg...),
 	}
 }
+
 // Status codes
 const (
 	// OK Return on Success
-	OK = iota+1
+	OK = iota + 1
 	// CANCELLED The operation was cancelled, typically by the caller.
 
 	CANCELLED
@@ -94,4 +95,3 @@ const (
 	// UNAUTHENTICATED The request does not have valid authentication credentials for the operation.
 	UNAUTHENTICATED
 )
-
