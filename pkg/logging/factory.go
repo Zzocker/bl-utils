@@ -1,7 +1,11 @@
 package logging
 
+import "github.com/Zzocker/bl-utils/config"
+
 var (
-	factory = map[string]loggerBuilder{}
+	factory = map[string]loggerBuilder{
+		config.ZAP: &zapBuilder{},
+	}
 )
 
 type loggerBuilder interface {
