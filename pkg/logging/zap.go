@@ -9,8 +9,8 @@ import (
 
 type zapBuilder struct{}
 
-func (z *zapBuilder) Build(level string, enableCaller bool) error {
-	zLogger, err := createZAP(level, enableCaller)
+func (z *zapBuilder) Build(cfg *LoggerConfig) error {
+	zLogger, err := createZAP(cfg)
 	if err != nil {
 		return err
 	}
@@ -25,14 +25,14 @@ func (z *zapBuilder) Build(level string, enableCaller bool) error {
 	return nil
 }
 
-func createZAP(level string, enabledCaller bool) (zap.Logger, error) {
+func createZAP(lCfg *LoggerConfig) (zap.Logger, error) {
 
 	rawJSON := []byte(`{
 		"level": "info",
 		"Development": true,
 		"DisableCaller": false,
 		"encoding": "console",
-		"outputPaths": ["stdout", "../../../demo.log"],
+		"outputPaths": ["stdout"],
 		"errorOutputPaths": ["stderr"],
 		"encoderConfig": {
 		   "timeKey":        "ts",
@@ -41,7 +41,7 @@ func createZAP(level string, enabledCaller bool) (zap.Logger, error) {
 			"nameKey":        "name",
 		   "stacktraceKey":  "stacktrace",
 			"callerKey":      "caller",
-		   "lineEnding":     "\n\t",
+		   "lineEnding":     "\n",
 		   "timeEncoder":     "time",
 		   "levelEncoder":    "lowercaseLevel",
 		   "durationEncoder": "stringDuration",
@@ -56,7 +56,7 @@ func createZAP(level string, enabledCaller bool) (zap.Logger, error) {
 		return *zLogger, errors.Wrap(err, "Unmarshal")
 	}
 	//customize it from configuration file
-	err := customizeLogFromConfig(&cfg, level, enabledCaller)
+	err := customizeLogFromConfig(&cfg, lCfg)
 	if err != nil {
 		return *zLogger, err
 	}
@@ -69,15 +69,17 @@ func createZAP(level string, enabledCaller bool) (zap.Logger, error) {
 	return *zLogger, nil
 }
 
-func customizeLogFromConfig(cfg *zap.Config, level string, enabledCaller bool) error {
-	cfg.DisableCaller = !enabledCaller
+func customizeLogFromConfig(cfg *zap.Config, lCfg *LoggerConfig) error {
+	cfg.DisableCaller = !lCfg.EnabledCaller
 
 	// set log level
 	l := zap.NewAtomicLevel().Level()
-	err := l.Set(level)
+	err := l.Set(lCfg.Level)
 	if err != nil {
 		return err
 	}
 	cfg.Level.SetLevel(l)
+	cfg.Encoding = lCfg.EncodingType
+	cfg.OutputPaths = lCfg.OutputPath
 	return nil
 }
