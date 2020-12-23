@@ -4,3 +4,8 @@ package config
 const (
 	MYSQL = "mysql"
 )
+
+// Loggers
+const (
+	ZAP = "zap"
+)
