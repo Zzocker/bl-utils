@@ -17,8 +17,9 @@ type DatastoreConfig struct {
 
 var (
 	dbMap = map[string]datastoreBuilder{
-		config.MYSQL: &sqlDSBuilder{},
-		config.REDIS: &redisBuilder{},
+		config.MYSQL:    &sqlDSBuilder{},
+		config.REDIS:    &redisBuilder{},
+		config.RABBITMQ: &rabbitMQBuilder{},
 	}
 )
 
