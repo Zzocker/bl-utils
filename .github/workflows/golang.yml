@@ -1,13 +1,14 @@
-name: builder
+name: linter_and_test
 on: [pull_request]
 jobs:
-  builder:
+  linter_and_test:
     runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
     steps:
-      - uses: action/checkout@v2
-      - uses: action/setup-go@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
       - uses: golangci/golangci-lint-action@v2
-        name: Lint
         with:
           version: v1.37
       - name: Test
