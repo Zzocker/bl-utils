@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"strings"
 )
 
 const (
@@ -33,39 +32,39 @@ func NewGoLog(level Level, out io.Writer, err io.Writer) Interface {
 	return &glog
 }
 
-func (l *goLog) Debug(v ...string) {
+func (l *goLog) Debug(v ...interface{}) {
 	if l.level > LEVEL_DEBUG {
 		return
 	}
-	_ = l.dlog.Output(goLog_callDepth, strings.Join(v, " "))
+	_ = l.dlog.Output(goLog_callDepth, fmt.Sprintln(v...))
 }
-func (l *goLog) Debugf(f string, v ...string) {
+func (l *goLog) Debugf(f string, v ...interface{}) {
 	if l.level > LEVEL_DEBUG {
 		return
 	}
-	_ = l.dlog.Output(goLog_callDepth, fmt.Sprintf(f, v))
+	_ = l.dlog.Output(goLog_callDepth, fmt.Sprintf(f, v...))
 }
-func (l *goLog) Info(v ...string) {
+func (l *goLog) Info(v ...interface{}) {
 	if l.level > LEVEL_INFO {
 		return
 	}
-	_ = l.ilog.Output(goLog_callDepth, strings.Join(v, " "))
+	_ = l.ilog.Output(goLog_callDepth, fmt.Sprintln(v...))
 }
-func (l *goLog) Infof(f string, v ...string) {
+func (l *goLog) Infof(f string, v ...interface{}) {
 	if l.level > LEVEL_INFO {
 		return
 	}
-	_ = l.ilog.Output(goLog_callDepth, fmt.Sprintf(f, v))
+	_ = l.ilog.Output(goLog_callDepth, fmt.Sprintf(f, v...))
 }
-func (l *goLog) Error(v ...string) {
+func (l *goLog) Error(v ...interface{}) {
 	if l.level > LEVEL_ERROR {
 		return
 	}
-	_ = l.elog.Output(goLog_callDepth, strings.Join(v, " "))
+	_ = l.elog.Output(goLog_callDepth, fmt.Sprintln(v...))
 }
-func (l *goLog) Errorf(f string, v ...string) {
+func (l *goLog) Errorf(f string, v ...interface{}) {
 	if l.level > LEVEL_ERROR {
 		return
 	}
-	_ = l.elog.Output(goLog_callDepth, fmt.Sprintf(f, v))
+	_ = l.elog.Output(goLog_callDepth, fmt.Sprintf(f, v...))
 }
